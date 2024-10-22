@@ -10,7 +10,7 @@
     </parent>
     <groupId>tn.esprit</groupId>
     <artifactId>PiEvent</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.1-SNAPSHOT</version>
     <name>PiEvent</name>
     <description>PiEvent</description>
     <properties>
@@ -57,25 +57,6 @@
                     </excludes>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.8</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
     <!-- Deploy to Nexus -->
@@ -84,6 +65,9 @@
             <id>deploymentRepo</id>
             <name>Nexus Repository</name>
             <url>http://localhost:8081/repository/maven-releases/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
     </distributionManagement>
 
