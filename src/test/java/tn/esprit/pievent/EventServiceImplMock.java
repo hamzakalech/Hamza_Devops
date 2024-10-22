@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tn.esprit.pievent.Entity.Event;
 import tn.esprit.pievent.Repository.IEventRepository;
@@ -15,12 +16,12 @@ import tn.esprit.pievent.Services.EventServicelmpl;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ExtendWith(MockitoExtension.class)
+
 public class EventServiceImplMock {
 
     @Mock
@@ -40,5 +41,48 @@ public class EventServiceImplMock {
         Mockito.when(eventRepository.findAll()).thenReturn(listEvents);
         List<Event> events = eventService.retrieveAllEvents();
         Assertions.assertNotNull(events);
+    }
+    @Test
+    public void testRetrieveEvent() {
+        Mockito.when(eventRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(event));
+        Event event1 = eventService.retrieveEvent(1);
+        Assertions.assertNotNull(event1);
+    }
+
+    @Test
+    public void testAddEvent() {
+        Mockito.when(eventRepository.save(Mockito.any(Event.class))).thenReturn(event);
+        Event event1 = eventService.addEvent(event);
+        Assertions.assertNotNull(event1);
+    }
+
+    @Test
+    public void testUpdateEvent() {
+        Mockito.when(eventRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(event));
+        Mockito.when(eventRepository.save(Mockito.any(Event.class))).thenReturn(event);
+        Event event1 = eventService.updateEvent(1L, event);
+        Assertions.assertNotNull(event1);
+    }
+
+    @Test
+    public void testRemoveEvent() {
+        Mockito.when(eventRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(event));
+        eventService.removeEvent(1);
+        Mockito.verify(eventRepository, Mockito.times(1)).delete(event);
+    }
+
+    @Test
+    public void testEventExists() {
+        Mockito.when(eventRepository.existsById(Mockito.anyLong())).thenReturn(true);
+        boolean exists = eventService.eventExists(1);
+        Assertions.assertTrue(exists);
+    }
+
+    @Test
+    public void testRetrieveEventByDates() {
+        Mockito.when(eventRepository.findByDate(Mockito.any(LocalDate.class))).thenReturn(listEvents);
+        List<Event> events = eventService.retrieveEventByDates(LocalDate.now());
+        Assertions.assertNotNull(events);
+        Assertions.assertEquals(2, events.size());
     }
 }
